@@ -6,6 +6,7 @@ import {
   getOtherUsersThunk,
   logoutUserThunk,
 } from "../../store/slice/user/user.thunk";
+import CyberHeader from "../../components/CyberHeader";
 
 const UserSidebar = () => {
   const dispatch = useDispatch();
@@ -47,17 +48,11 @@ const UserSidebar = () => {
   return (
     <div className="w-full md:max-w-[20rem] h-[100dvh] flex flex-col border-r border-white/10 bg-base-100 overflow-hidden">
 
-      {/* Logo */}
-<div className="bg-black rounded-xl px-4 m-2 py-3 w-[95%] mx-auto">
-  <h1 className="text-[#7480FF] text-[15px] font-bold leading-none">
-    MEHFIL
-  </h1>
+{/* Logo */}
+<div className="logo-card relative m-2 w-[95%] mx-auto rounded-2xl p-[1.5px]">
+<CyberHeader />
 
-  <p className="text-gray-400 text-xl font-bold mt-1">
-    Connect Freely
-  </p>
 </div>
-
       {/* Search */}
       <div className="px-3 pb-3">
         <label className="input input-bordered flex items-center gap-2 w-full">

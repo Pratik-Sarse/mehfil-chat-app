@@ -26,3 +26,59 @@
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
+
+/* ---------- Premium Logo Card ---------- */
+
+.logo-card{
+    background: linear-gradient(
+        130deg,
+        #7480ff,
+        #4f46e5,
+        #8b5cf6,
+        #7480ff
+    );
+    background-size:300% 300%;
+    animation:borderMove 8s linear infinite;
+}
+
+.logo-inner{
+    background:#07090d;
+}
+
+.logo-title{
+    color:#7480ff;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:8px;
+}
+
+.logo-subtitle{
+    color:white;
+    font-size:2rem;
+    font-weight:800;
+    line-height:1.1;
+}
+
+.logo-card:hover{
+    transform:translateY(-2px);
+    transition:.3s;
+    box-shadow:
+    0 0 25px rgba(116,128,255,.25);
+}
+
+@keyframes borderMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
