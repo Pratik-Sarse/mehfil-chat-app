@@ -31,7 +31,7 @@ const CyberHeader = () => {
         bg-gradient-to-r
         from-violet-500
         via-fuchsia-500
-        to-cyan-400"
+        to-cyan-400 opacity-[.6]"
       />
 
       {/* Card */}
@@ -92,8 +92,8 @@ const CyberHeader = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="origin-left h-[2px] w-90 rounded-full mt-2
-          bg-gradient-to-r from-violet-500 via-cyan-400 to-fuchsia-500"
+          className="origin-left h-[2px]  w-90 rounded-full mt-2
+          bg-gradient-to-r from-violet-500 via-cyan-400 to-fuchsia-500 opacity-0"
         />
 
         {/* Lightning */}
