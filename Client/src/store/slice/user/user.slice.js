@@ -15,7 +15,7 @@ const initialState = {
   buttonLoading: false,
   screenLoading: true,
 
-  // Unread messages
+  // Temporary unread badge
   unreadCounts: {},
 };
 

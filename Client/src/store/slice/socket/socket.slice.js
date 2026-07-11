@@ -12,7 +12,7 @@ export const socketSlice = createSlice({
   initialState,
   reducers: {
     initializeSocket: (state, action) => {
-      // Purana socket disconnect karo
+      // Old socket disconnect
       if (state.socket) {
         state.socket.disconnect();
       }
@@ -24,13 +24,14 @@ export const socketSlice = createSlice({
 
         transports: ["websocket"],
 
+        autoConnect: true,
+
         reconnection: true,
         reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
-        timeout: 20000,
 
-        autoConnect: true,
+        timeout: 20000,
       });
 
       socket.on("connect", () => {
@@ -39,10 +40,6 @@ export const socketSlice = createSlice({
 
       socket.on("disconnect", (reason) => {
         console.log("❌ Socket Disconnected:", reason);
-      });
-
-      socket.on("reconnect", (attempt) => {
-        console.log("🔄 Socket Reconnected:", attempt);
       });
 
       socket.on("connect_error", (err) => {

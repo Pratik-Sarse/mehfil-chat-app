@@ -61,12 +61,26 @@ const User = ({ userDetails }) => {
         )}
       </div>
 
-      {/* Right Side Badge */}
+      {/* Unread Badge */}
       {unread > 0 && (
-        <div className="flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-red-500 text-white text-[11px] font-bold animate-pulse">
-          {unread > 99 ? "99+" : unread}
-        </div>
-      )}
+  <div
+    className="
+      flex items-center justify-center
+      min-w-[26px]
+      h-[26px]
+      px-2
+      rounded-full
+      bg-red-500
+      text-white
+      text-xs
+      font-extrabold
+      animate-bounce
+      shadow-[0_0_18px_rgba(239,68,68,0.8)]
+    "
+  >
+    {unread > 99 ? "99+" : unread}
+  </div>
+)}
     </div>
   );
 };

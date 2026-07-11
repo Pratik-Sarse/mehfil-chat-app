@@ -28,38 +28,38 @@ const Home = () => {
   useEffect(() => {
     if (!socket) return;
 
-    // Online users
+    // Online Users
     const handleOnlineUsers = (onlineUsers) => {
       dispatch(setOnlineUsers(onlineUsers));
     };
 
-    // New message
-const handleNewMessage = (newMessage) => {
-  const isCurrentChat =
-    selectedUser &&
-    (newMessage.senderId === selectedUser._id ||
-      newMessage.receiverId === selectedUser._id);
+    // New Message
+    const handleNewMessage = (newMessage) => {
+      const isCurrentChat =
+        selectedUser &&
+        (newMessage.senderId === selectedUser._id ||
+          newMessage.receiverId === selectedUser._id);
 
-  // Current chat open hai
-  if (isCurrentChat) {
-    dispatch(setNewMessage(newMessage));
-  }
+      // Agar current chat open hai to message show karo
+      if (isCurrentChat) {
+        dispatch(setNewMessage(newMessage));
+      }
 
-  // Agar kisi aur user ka message aaya hai to unread count badhao
-  if (
-    newMessage.senderId !== userProfile?._id &&
-    newMessage.senderId !== selectedUser?._id
-  ) {
-    dispatch(incrementUnread(newMessage.senderId));
-  }
+      // Agar kisi aur user ka message aaya hai to unread badge badhao
+      if (
+        newMessage.senderId !== userProfile?._id &&
+        newMessage.senderId !== selectedUser?._id
+      ) {
+        dispatch(incrementUnread(newMessage.senderId));
+      }
 
-  // Notification Sound
-  if (newMessage.senderId !== userProfile?._id) {
-    const audio = new Audio("/notification_whatsapp_style.wav");
-    audio.volume = 0.5;
-    audio.play().catch(() => {});
-  }
-};
+      // Notification Sound
+      if (newMessage.senderId !== userProfile?._id) {
+        const audio = new Audio("/notification_whatsapp_style.wav");
+        audio.volume = 0.5;
+        audio.play().catch(() => {});
+      }
+    };
 
     // Typing
     const handleTyping = ({ senderId }) => {
