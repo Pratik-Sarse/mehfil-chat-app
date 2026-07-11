@@ -45,7 +45,7 @@ const UserSidebar = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-full md:max-w-[20rem] h-screen flex flex-col border-r border-white/10 bg-base-100">
+    <div className="w-full md:max-w-[20rem] h-[100dvh] flex flex-col border-r border-white/10 bg-base-100 overflow-hidden">
 
       {/* Logo */}
 <div className="bg-black rounded-xl px-4 m-2 py-3 w-[95%] mx-auto">
@@ -73,7 +73,7 @@ const UserSidebar = () => {
       </div>
 
       {/* User List */}
-      <div className="flex-1 overflow-y-auto px-3 space-y-2">
+      <div className="flex-1 overflow-y-auto px-3 space-y-2 min-h-0">
         {users?.length > 0 ? (
           users.map((userDetails) => (
             <User

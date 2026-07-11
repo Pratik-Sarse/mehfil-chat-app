@@ -46,7 +46,7 @@ const Home = () => {
       if (newMessage.senderId !== userProfile?._id) {
         const audio = new Audio("/notification_whatsapp_style.wav");
         audio.volume = 0.5;
-        audio.play().catch(() => {});
+        audio.play().catch(() => { });
       }
     };
 
@@ -80,13 +80,13 @@ const Home = () => {
   return (
     <>
       {/* Desktop */}
-      <div className="hidden md:flex h-screen overflow-hidden">
+      <div className="hidden md:flex h-[100dvh] overflow-hidden">
         <UserSidebar />
         <MessageContainer />
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden h-screen overflow-hidden">
+      <div className="md:hidden h-[100dvh] overflow-hidden">
         {!selectedUser ? <UserSidebar /> : <MessageContainer />}
       </div>
     </>

@@ -6,7 +6,23 @@
   html {
     font-family: Inter, sans-serif;
   }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body {
+    overscroll-behavior: none;
+  }
 }
-*{
-    -webkit-tap-highlight-color: transparent;
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
