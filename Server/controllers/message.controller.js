@@ -34,9 +34,14 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     await conversation.save();
   }
 
-  // socket.io
-  const socketId = getSocketId(receiverId)
+// Socket.IO
+const socketId = getSocketId(receiverId);
+
+if (socketId) {
   io.to(socketId).emit("newMessage", newMessage);
+} else {
+  console.log(`User ${receiverId} is offline.`);
+}
 
   res.status(200).json({
     success: true,
