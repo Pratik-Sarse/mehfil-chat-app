@@ -8,6 +8,10 @@ import Signup from "./pages/authentication/Signup.jsx";
 import { store } from "./store/store.js";
 import { Provider } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+// import { registerSW } from "virtual:pwa-register";
+import { registerSW } from "virtual:pwa-register";
+
+registerSW({ immediate: true });
 
 const router = createBrowserRouter([
   {

@@ -41,7 +41,6 @@ export const register = asyncHandler(async (req, res, next) => {
   });
 
   res
-  res
     .status(200)
     .cookie("token", token, {
       httpOnly: false,
@@ -90,8 +89,6 @@ export const login = asyncHandler(async (req, res, next) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 
-  res
-  res
   res
     .status(200)
     .cookie("token", token, {
