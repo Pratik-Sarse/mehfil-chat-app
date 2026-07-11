@@ -29,7 +29,7 @@
 
 /* ---------- Premium Logo Card ---------- */
 
-.logo-card{
+/* .logo-card{
     background: linear-gradient(
         130deg,
         #7480ff60,
@@ -39,7 +39,7 @@
     );
     background-size:300% 300%;
     animation:borderMove 8s linear infinite;
-}
+} */
 
 .logo-inner{
     background:#07090d;
