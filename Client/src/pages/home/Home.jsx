@@ -8,6 +8,7 @@ import {
   setTypingUser,
 } from "../../store/slice/socket/socket.slice";
 import { setNewMessage } from "../../store/slice/message/message.slice";
+import { incrementUnread } from "../../store/slice/user/user.slice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -33,22 +34,32 @@ const Home = () => {
     };
 
     // New message
-    const handleNewMessage = (newMessage) => {
-      if (
-        selectedUser &&
-        (newMessage.senderId === selectedUser._id ||
-          newMessage.receiverId === selectedUser._id)
-      ) {
-        dispatch(setNewMessage(newMessage));
-      }
+const handleNewMessage = (newMessage) => {
+  const isCurrentChat =
+    selectedUser &&
+    (newMessage.senderId === selectedUser._id ||
+      newMessage.receiverId === selectedUser._id);
 
-      // Notification Sound
-      if (newMessage.senderId !== userProfile?._id) {
-        const audio = new Audio("/notification_whatsapp_style.wav");
-        audio.volume = 0.5;
-        audio.play().catch(() => { });
-      }
-    };
+  // Current chat open hai
+  if (isCurrentChat) {
+    dispatch(setNewMessage(newMessage));
+  }
+
+  // Agar kisi aur user ka message aaya hai to unread count badhao
+  if (
+    newMessage.senderId !== userProfile?._id &&
+    newMessage.senderId !== selectedUser?._id
+  ) {
+    dispatch(incrementUnread(newMessage.senderId));
+  }
+
+  // Notification Sound
+  if (newMessage.senderId !== userProfile?._id) {
+    const audio = new Audio("/notification_whatsapp_style.wav");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  }
+};
 
     // Typing
     const handleTyping = ({ senderId }) => {
