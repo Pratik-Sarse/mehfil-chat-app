@@ -32,10 +32,10 @@
 .logo-card{
     background: linear-gradient(
         130deg,
-        #7480ff,
-        #4f46e5,
-        #8b5cf6,
-        #7480ff
+        #7480ff60,
+        #4e46e54f,
+        #8a5cf65e,
+        #7480ff4b
     );
     background-size:300% 300%;
     animation:borderMove 8s linear infinite;
