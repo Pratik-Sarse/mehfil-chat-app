@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, memo } from "react";
 import { useSelector } from "react-redux";
 
 const Message = ({ messageDetails }) => {
@@ -14,8 +14,7 @@ const Message = ({ messageDetails }) => {
     messageRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [messageDetails]);
-  console.log(messageDetails);
+  }, []);
 
   return (
     <div
@@ -24,7 +23,7 @@ const Message = ({ messageDetails }) => {
     >
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
-          <img className= ""
+          <img
             src={isMyMessage ? userProfile?.avatar : selectedUser?.avatar}
             alt="avatar"
           />
@@ -48,4 +47,4 @@ const Message = ({ messageDetails }) => {
   );
 };
 
-export default Message;
+export default memo(Message);

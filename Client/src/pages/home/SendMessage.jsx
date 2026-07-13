@@ -8,6 +8,7 @@ const SendMessage = () => {
 
   const { selectedUser } = useSelector((state) => state.userReducer);
   const { socket } = useSelector((state) => state.socketReducer);
+  const { buttonLoading } = useSelector((state) => state.messageReducer);
 
   const [message, setMessage] = useState("");
 
@@ -19,15 +20,12 @@ const SendMessage = () => {
 
     if (!socket || !selectedUser) return;
 
-    // Typing event
     socket.emit("typing", {
       receiverId: selectedUser._id,
     });
 
-    // Reset timer
     clearTimeout(typingTimeout.current);
 
-    // Stop typing after 1 second
     typingTimeout.current = setTimeout(() => {
       socket.emit("stopTyping", {
         receiverId: selectedUser._id,
@@ -35,13 +33,18 @@ const SendMessage = () => {
     }, 1000);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim()) return;
+    if (buttonLoading) return;
+
+    const text = message;
+
+    setMessage("");
 
     dispatch(
       sendMessageThunk({
-        recieverId: selectedUser?._id,
-        message,
+        recieverId: selectedUser._id,
+        message: text,
       })
     );
 
@@ -52,8 +55,6 @@ const SendMessage = () => {
     }
 
     clearTimeout(typingTimeout.current);
-
-    setMessage("");
   };
 
   return (
@@ -66,6 +67,7 @@ const SendMessage = () => {
         onChange={handleTyping}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
+            e.preventDefault();
             handleSendMessage();
           }
         }}
@@ -73,6 +75,7 @@ const SendMessage = () => {
 
       <button
         onClick={handleSendMessage}
+        disabled={buttonLoading}
         className="btn btn-square btn-primary"
       >
         <IoIosSend size={25} />

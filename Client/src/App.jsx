@@ -5,18 +5,18 @@ import { useDispatch } from "react-redux";
 import { getUserProfileThunk } from "./store/slice/user/user.thunk";
 
 function App() {
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getUserProfileThunk());
-    })();
-  }, []);
+    dispatch(getUserProfileThunk());
+  }, [dispatch]);
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </>
   );
 }
