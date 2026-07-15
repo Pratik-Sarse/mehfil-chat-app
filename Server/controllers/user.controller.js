@@ -20,9 +20,9 @@ export const register = asyncHandler(async (req, res, next) => {
 
   // const avatarType = gender === "male" ? "boy" : "girl";
   const avatar =
-  gender === "male"
-    ? `https://api.dicebear.com/9.x/adventurer/svg?seed=${username}`
-    : `https://api.dicebear.com/9.x/notionists/svg?seed=${username}`;
+    gender === "male"
+      ? `https://api.dicebear.com/9.x/adventurer/svg?seed=${username}`
+      : `https://api.dicebear.com/9.x/notionists/svg?seed=${username}`;
 
   const newUser = await User.create({
     username,

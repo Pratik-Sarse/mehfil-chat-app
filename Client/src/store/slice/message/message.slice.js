@@ -21,10 +21,19 @@ export const messageSlice = createSlice({
       state.messages = [...oldMessages, action.payload];
     },
 
-    // Socket se delete hua message remove karo
-    removeMessage: (state, action) => {
-      state.messages = (state.messages || []).filter(
-        (msg) => msg._id !== action.payload
+    // Socket se delete hua message ko mark karo
+    setMessageDeleted: (state, action) => {
+      const { messageId, deletedBy, deletedAt } = action.payload;
+      state.messages = (state.messages || []).map((msg) =>
+        msg._id === messageId
+          ? {
+              ...msg,
+              isDeleted: true,
+              message: "This message was deleted",
+              deletedBy,
+              deletedAt,
+            }
+          : msg
       );
     },
   },
@@ -71,11 +80,21 @@ export const messageSlice = createSlice({
     });
 
     builder.addCase(deleteMessageThunk.fulfilled, (state, action) => {
-      const messageId = action.payload?.responseData?.messageId;
+      const payload = action.payload?.responseData;
 
-      state.messages = (state.messages || []).filter(
-        (msg) => msg._id !== messageId
-      );
+      if (payload?.messageId) {
+        state.messages = (state.messages || []).map((msg) =>
+          msg._id === payload.messageId
+            ? {
+                ...msg,
+                isDeleted: true,
+                message: "This message was deleted",
+                deletedBy: payload.deletedBy,
+                deletedAt: payload.deletedAt,
+              }
+            : msg
+        );
+      }
 
       state.buttonLoading = false;
     });
@@ -88,7 +107,7 @@ export const messageSlice = createSlice({
 
 export const {
   setNewMessage,
-  removeMessage,
+  setMessageDeleted,
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

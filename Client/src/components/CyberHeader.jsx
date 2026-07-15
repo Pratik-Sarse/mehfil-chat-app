@@ -96,7 +96,7 @@ const CyberHeader = () => {
           bg-gradient-to-r from-violet-500 via-cyan-400 to-fuchsia-500 opacity-0"
         />
 
-        {/* Lightning */}
+        {/* Lightning (clickable: reload app / update SW) */}
         <motion.div
           animate={{
             opacity: [0.3, 1, 0.3],
@@ -107,7 +107,36 @@ const CyberHeader = () => {
             duration: 1.5,
             repeat: Infinity,
           }}
-          className="absolute top-3 right-3 text-yellow-300 text-base"
+          className="absolute top-3 right-3 text-yellow-300 text-base cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            if (navigator.serviceWorker?.controller) {
+              navigator.serviceWorker.getRegistration().then((registration) => {
+                if (registration?.waiting) {
+                  registration.waiting.postMessage({ type: "SKIP_WAITING" });
+                }
+                window.location.reload();
+              });
+              return;
+            }
+            window.location.reload();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              if (navigator.serviceWorker?.controller) {
+                navigator.serviceWorker.getRegistration().then((registration) => {
+                  if (registration?.waiting) {
+                    registration.waiting.postMessage({ type: "SKIP_WAITING" });
+                  }
+                  window.location.reload();
+                });
+                return;
+              }
+              window.location.reload();
+            }
+          }}
         >
           <FaBolt />
         </motion.div>

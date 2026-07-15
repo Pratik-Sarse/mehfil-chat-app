@@ -7,7 +7,7 @@ import {
   setOnlineUsers,
   setTypingUser,
 } from "../../store/slice/socket/socket.slice";
-import { setNewMessage } from "../../store/slice/message/message.slice";
+import { setMessageDeleted, setNewMessage } from "../../store/slice/message/message.slice";
 import { incrementUnread } from "../../store/slice/user/user.slice";
 
 const Home = () => {
@@ -61,6 +61,11 @@ const Home = () => {
       }
     };
 
+    // Message Deleted
+    const handleMessageDeleted = ({ messageId, deletedBy, deletedAt }) => {
+      dispatch(setMessageDeleted({ messageId, deletedBy, deletedAt }));
+    };
+
     // Typing
     const handleTyping = ({ senderId }) => {
       if (selectedUser?._id === senderId) {
@@ -77,12 +82,14 @@ const Home = () => {
 
     socket.on("onlineUsers", handleOnlineUsers);
     socket.on("newMessage", handleNewMessage);
+    socket.on("messageDeleted", handleMessageDeleted);
     socket.on("typing", handleTyping);
     socket.on("stopTyping", handleStopTyping);
 
     return () => {
       socket.off("onlineUsers", handleOnlineUsers);
       socket.off("newMessage", handleNewMessage);
+      socket.off("messageDeleted", handleMessageDeleted);
       socket.off("typing", handleTyping);
       socket.off("stopTyping", handleStopTyping);
     };
