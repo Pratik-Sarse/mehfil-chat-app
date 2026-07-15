@@ -2,7 +2,7 @@ import Message from "../models/message.model.js";
 import Conversation from "../models/conversation.model.js";
 import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { errorHandler } from "../utilities/errorHandler.utility.js";
-import {getSocketId, io} from '../socket/socket.js'
+import { getSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = asyncHandler(async (req, res, next) => {
   const senderId = req.user._id;
@@ -29,19 +29,15 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     message,
   });
 
-  if (newMessage) {
-    conversation.messages.push(newMessage._id);
-    await conversation.save();
+  conversation.messages.push(newMessage._id);
+  await conversation.save();
+
+  // Socket.IO
+  const socketId = getSocketId(receiverId);
+
+  if (socketId) {
+    io.to(socketId).emit("newMessage", newMessage);
   }
-
-// Socket.IO
-const socketId = getSocketId(receiverId);
-
-if (socketId) {
-  io.to(socketId).emit("newMessage", newMessage);
-} else {
-  console.log(`User ${receiverId} is offline.`);
-}
 
   res.status(200).json({
     success: true,
@@ -57,9 +53,13 @@ export const getMessages = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("All fields are required", 400));
   }
 
-  let conversation = await Conversation.findOne({
+  const conversation = await Conversation.findOne({
     participants: { $all: [myId, otherParticipantId] },
   }).populate("messages");
+
+  if (!conversation) {
+    return res.status(200).json({ success: true, responseData: { messages: [], conversation: null } });
+  }
 
   res.status(200).json({
     success: true,
@@ -67,3 +67,54 @@ export const getMessages = asyncHandler(async (req, res, next) => {
   });
 });
 
+export const deleteMessage = asyncHandler(async (req, res, next) => {
+  const myId = req.user._id;
+  const { messageId } = req.params;
+
+  const message = await Message.findById(messageId);
+
+  if (!message) {
+    return next(new errorHandler("Message not found", 404));
+  }
+
+  // Sirf sender hi delete kar sakta hai
+  if (message.senderId.toString() !== myId.toString()) {
+    return next(
+      new errorHandler("You can delete only your own messages", 403)
+    );
+  }
+
+  // Conversation se message remove
+  await Conversation.updateOne(
+    {
+      participants: {
+        $all: [message.senderId, message.receiverId],
+      },
+    },
+    {
+      $pull: {
+        messages: message._id,
+      },
+    }
+  );
+
+  // Message delete
+  await Message.findByIdAndDelete(messageId);
+
+  // Receiver ko realtime update
+  const receiverSocketId = getSocketId(message.receiverId);
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("messageDeleted", {
+      messageId,
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Message deleted successfully",
+    responseData: {
+      messageId,
+    },
+  });
+});

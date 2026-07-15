@@ -40,11 +40,15 @@ export const register = asyncHandler(async (req, res, next) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 
+  // avoid returning password to client
+  const userToReturn = newUser.toObject ? newUser.toObject() : newUser;
+  if (userToReturn.password) delete userToReturn.password;
+
   res
     .status(200)
     .cookie("token", token, {
-      httpOnly: false,
-      secure: false,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
       path: "/",
       maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -52,7 +56,7 @@ export const register = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       responseData: {
-        user,
+        user: userToReturn,
         token,
       },
     });
@@ -89,11 +93,15 @@ export const login = asyncHandler(async (req, res, next) => {
     expiresIn: process.env.JWT_EXPIRES,
   });
 
+  // avoid returning password to client
+  const userToReturn = user.toObject ? user.toObject() : user;
+  if (userToReturn.password) delete userToReturn.password;
+
   res
     .status(200)
     .cookie("token", token, {
-      httpOnly: false,
-      secure: false,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
       path: "/",
       maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -101,7 +109,7 @@ export const login = asyncHandler(async (req, res, next) => {
     .json({
       success: true,
       responseData: {
-        user,
+        user: userToReturn,
         token,
       },
     });
@@ -124,8 +132,9 @@ export const logout = asyncHandler(async (req, res, next) => {
     .cookie("token", "", {
       expires: new Date(Date.now()),
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
+      path: "/",
     })
     .json({
       success: true,

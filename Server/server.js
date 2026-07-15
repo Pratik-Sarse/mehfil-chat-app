@@ -6,15 +6,17 @@ import cors from "cors";
 
 connectDB();
 
-app.use(
-  cors({
-    origin: [
+const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://192.168.0.110:5173",
   "http://192.168.0.110:5174",
   process.env.CLIENT_URL,
-],
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins,
     credentials: true,
   })
 );
